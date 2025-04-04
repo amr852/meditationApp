@@ -5,11 +5,13 @@ import { useFonts } from "expo-font";
 import { ActivityIndicator, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "../context/ThemeProvider";
+
 export const unstable_settings = {
   initialRouteName: "login",
 };
+
 const Layout = () => {
- const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [fontsLoaded] = useFonts({
@@ -17,7 +19,8 @@ const Layout = () => {
     DMMedium: require("../assets/fonts/DMSans-Medium.ttf"),
     DMRegular: require("../assets/fonts/DMSans-Regular.ttf"),
   });
-    useEffect(() => {
+
+  useEffect(() => {
     const checkLoginState = async () => {
       try {
         const user = await AsyncStorage.getItem("userDetails");
@@ -29,7 +32,12 @@ const Layout = () => {
       }
       setIsLoading(false);
     };
-      if (isLoading || !fontsLoaded) {
+
+    checkLoginState();
+  }, []);
+
+  // ✅ Show loading screen while checking login state or fonts are not loaded
+  if (isLoading || !fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
@@ -37,8 +45,6 @@ const Layout = () => {
     );
   }
 
-    checkLoginState();
-  }, []);
   return (
     <ThemeProvider>
       <Stack
@@ -51,5 +57,6 @@ const Layout = () => {
       </Stack>
     </ThemeProvider>
   );
-}
+};
+
 export default Layout;
