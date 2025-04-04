@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import { ActivityIndicator, View } from "react-native";
@@ -32,6 +31,7 @@ const Layout = () => {
       }
       setIsLoading(false);
     };
+
     checkLoginState();
   }, []);
 
@@ -45,13 +45,14 @@ const Layout = () => {
 
   return (
     <ThemeProvider>
-      <Stack
-        initialRouteName={isLoggedIn ? "home" : "login"}
-        screenOptions={{ headerShown: false }}
-      >
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
         <Stack.Screen name="login" />
         <Stack.Screen name="signup" />
         <Stack.Screen name="home" />
+        <Stack.Screen name="settings/index" />
+        <Stack.Screen name="settings/ThemeChange" />
+        <Stack.Screen name="settings/DailyReminders" />
       </Stack>
     </ThemeProvider>
   );

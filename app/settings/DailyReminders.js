@@ -10,7 +10,10 @@ import * as Notifications from "expo-notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { COLORS, SIZES } from "../../constants";
 import { useTheme } from "../../context/ThemeProvider";
+import { useRouter } from "expo-router";
+
 const DailyReminders = () => {
+    const router = useRouter();
  const { theme } = useTheme();
 const isDarkMode = theme === "dark"
 const [reminders, setReminders] = useState([]);
@@ -106,6 +109,22 @@ const deleteReminder = async (id) => {
 return(
 
  <SafeAreaView style={{ flex: 1, backgroundColor: isDarkMode ? COLORS.darkBackground : COLORS.lightWhite }}>
+  <TouchableOpacity
+  onPress={() => router.push("/home")}
+  style={{
+    position: "absolute",
+    top: 10,
+    left: 10,
+    backgroundColor: "#FE7654",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    zIndex: 10, // Make sure it's on top
+  }}
+>
+  <Text style={{ color: "white", fontSize: 14 }}>🏠 Home</Text>
+</TouchableOpacity>
+
       <Stack.Screen options={{ headerTitle: "Daily Reminders" }} />
       <ScrollView contentContainerStyle={{ padding: SIZES.medium }}>
         <Calendar
