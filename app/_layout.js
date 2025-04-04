@@ -32,11 +32,9 @@ const Layout = () => {
       }
       setIsLoading(false);
     };
-
     checkLoginState();
   }, []);
 
-  // ✅ Show loading screen while checking login state or fonts are not loaded
   if (isLoading || !fontsLoaded) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
