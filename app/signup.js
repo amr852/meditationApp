@@ -11,136 +11,171 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Stack, useRouter } from "expo-router";
 import { COLORS, icons, SHADOWS } from "../constants";
-const SignUp = () => {
-    const [userName, setUserName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const router = useRouter();
-    const handleRegister = async () => {
-        if (!userName || !email || !password) {
-          Alert.alert("Validation Error", "Please fill in all fields.");
-          return;
-        }
-    
-        const userDetails = { userName, email,password, token: "sample-token" };
-        await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
-        console.log("User logged in:", userDetails);
-    
-        router.push("/login");
-      };
-    return (
-            <>
-<SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
-<Stack.Screen
-        options={{
-          headerStyle: { backgroundColor: COLORS.lightWhite },
-          headerShadowVisible: false,
-          headerLeft: () => (
-        <></>
-          ),
-          headerTitle: "",
-        }}
-      />
-      <View style={{ padding: 20 }} testID="signupContainer">
-      <View
-          style={{
-            padding: 20,
-            marginLeft: "auto",
-            marginRight: "auto",
-            backgroundColor: "#f0f0f0",
-            borderRadius: 50,
-            height: 90,
-            ...SHADOWS.medium,
-            shadowColor: COLORS.white,
-          }}
-          testID="imageIcon"
-        >
-          <Image
-            source={icons.menu}
-            style={{
-              width: 50,
-              height: 50,
-            }}
-          />
-        </View>
-        <View style={{ marginTop: 30 }} testID="formData">
-        <View style={{ marginBottom: 10 }} testID="userName">
-            <TextInput
-              style={{
-                borderColor: "#ccc",
-                borderWidth: 1,
-                padding: 10,
-                borderRadius: 5,
-                marginBottom: 10,
-              }}
-              value={userName}
-              onChangeText={setUserName}
-              placeholder="UserName"
-            />
-</View>
-<View style={{ marginBottom: 10 }} testID="email">
-            <TextInput
-              style={{
-                borderColor: "#ccc",
-                borderWidth: 1,
-                padding: 10,
-                borderRadius: 5,
-                marginBottom: 10,
-              }}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Email"
-            />
-          </View>
 
-          <View style={{ marginBottom: 20 }} testID="password">
-            <TextInput
-              style={{
-                borderColor: "#ccc",
-                borderWidth: 1,
-                padding: 10,
-                borderRadius: 5,
-              }}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={true}
-              placeholder="Password"
-            />
-          </View>
-</View>
-</View>
-<TouchableOpacity
-            style={{
-              backgroundColor: COLORS.primary,
-              padding: 15,
-              borderRadius: 5,
-              alignItems: "center",
-              marginBottom: 10,
-            }}
-            onPress={handleRegister}
-            testID="handleRegister"
-          >
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Sign Up</Text>
-          </TouchableOpacity>
+const SignUp = () => {
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userNameError, setUserNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const router = useRouter();
+
+  const handleRegister = async () => {
+    let hasError = false;
+
+    if (!userName.trim()) {
+      setUserNameError("Username is required");
+      hasError = true;
+    } else {
+      setUserNameError("");
+    }
+
+    if (!email.trim()) {
+      setEmailError("Email is required");
+      hasError = true;
+    } else {
+      setEmailError("");
+    }
+
+    if (!password.trim()) {
+      setPasswordError("Password is required");
+      hasError = true;
+    } else {
+      setPasswordError("");
+    }
+
+    if (hasError) return;
+
+    const userDetails = { userName, email, password, token: "sample-token" };
+    await AsyncStorage.setItem("userDetails", JSON.stringify(userDetails));
+    console.log("User logged in:", userDetails);
+    router.push("/login");
+  };
+
+  return (
+    <>
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
+        <Stack.Screen
+          options={{
+            headerStyle: { backgroundColor: COLORS.lightWhite },
+            headerShadowVisible: false,
+            headerLeft: () => <></>,
+            headerTitle: "",
+          }}
+        />
+        <View style={{ padding: 20 }} testID="signupContainer">
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: 5,
+              padding: 20,
+              marginLeft: "auto",
+              marginRight: "auto",
+              backgroundColor: "#f0f0f0",
+              borderRadius: 50,
+              height: 90,
+              ...SHADOWS.medium,
+              shadowColor: COLORS.white,
             }}
-            testID="textData"
+            testID="imageIcon"
           >
-            <Text style={{ marginRight: 5 }}>Already have an account?</Text>
-            <TouchableOpacity onPress={() => router.push("/login")}>
-              <Text style={{ color: "blue" }}>Login</Text>
-            </TouchableOpacity>
+            <Image
+              source={icons.menu}
+              style={{
+                width: 50,
+                height: 50,
+              }}
+            />
           </View>
-</SafeAreaView>
 
-            </>
+          <View style={{ marginTop: 30 }} testID="formData">
+            <View style={{ marginBottom: 10 }} testID="userName">
+              <TextInput
+                style={{
+                  borderColor: "#ccc",
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 5,
+                  marginBottom: 10,
+                }}
+                value={userName}
+                onChangeText={setUserName}
+                placeholder="UserName"
+              />
+              {userNameError !== "" && (
+                <Text style={{ color: "red", marginBottom: 5 }}>{userNameError}</Text>
+              )}
+            </View>
 
-        )
-}
+            <View style={{ marginBottom: 10 }} testID="email">
+              <TextInput
+                style={{
+                  borderColor: "#ccc",
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 5,
+                  marginBottom: 10,
+                }}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Email"
+              />
+              {emailError !== "" && (
+                <Text style={{ color: "red", marginBottom: 5 }}>{emailError}</Text>
+              )}
+            </View>
+
+            <View style={{ marginBottom: 20 }} testID="password">
+              <TextInput
+                style={{
+                  borderColor: "#ccc",
+                  borderWidth: 1,
+                  padding: 10,
+                  borderRadius: 5,
+                }}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={true}
+                placeholder="Password"
+              />
+              {passwordError !== "" && (
+                <Text style={{ color: "red", marginBottom: 5 }}>{passwordError}</Text>
+              )}
+            </View>
+          </View>
+        </View>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: COLORS.primary,
+            padding: 15,
+            borderRadius: 5,
+            alignItems: "center",
+            marginBottom: 10,
+          }}
+          onPress={handleRegister}
+          testID="handleRegister"
+        >
+          <Text style={{ color: "#fff", fontWeight: "bold" }}>Sign Up</Text>
+        </TouchableOpacity>
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 5,
+          }}
+          testID="textData"
+        >
+          <Text style={{ marginRight: 5 }}>Already have an account?</Text>
+          <TouchableOpacity onPress={() => router.push("/login")}>
+            <Text style={{ color: "blue" }}>Login</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </>
+  );
+};
 
 export default SignUp;

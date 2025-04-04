@@ -7,7 +7,7 @@ import Welcome from "../components/Welcome";
 import PopularMeditation from "../components/PopularMeditation";
 import DailyMeditation from "../components/DailyMeditation";
 import { useTheme } from "../context/ThemeProvider";
-
+import DailyQuote from"../components/DailyQuote";
 const Home = () => {
     const [userDetails, setUserDetails] = useState(null);
 
@@ -43,9 +43,12 @@ const Home = () => {
           testID="screensDisplay"
         >
 
-<Welcome userDetails={userDetails ? JSON.parse(userDetails) : null} isDarkMode={isDarkMode}/>
-<PopularMeditation isDarkMode={isDarkMode}/>
-<DailyMeditation isDarkMode={isDarkMode}/>
+
+<Welcome userDetails={userDetails ? JSON.parse(userDetails) : null} isDarkMode={isDarkMode} />
+<DailyQuote />
+<PopularMeditation isDarkMode={isDarkMode} />
+<DailyMeditation isDarkMode={isDarkMode} />
+
 </View>
       </ScrollView>
     </SafeAreaView>
